@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bs.service.mapper.CustomerQuestionLogMapper">
+
+    <resultMap id="questionMap" type="com.bs.service.entity.wx.QuestionHistoryVo">
+        <!--property:实体类中的属性，column：数据库中的列-->
+        <id property="id" column="id"/>
+        <result property="isOk" column="is_ok"/>
+        <result property="optionIds" column="option_ids"/>
+        <association property="question" javaType="com.bs.service.entity.Question">
+            <id property="id" column="questionId" />
+            <result property="text" column="questionText"/>
+            <result property="typeId" column="typeId"/>
+            <result property="parse" column="parse"/>
+        </association>
+        <collection property="options" ofType="com.bs.service.entity.wx.WxOptionForm">
+            <id property="id" column="optionId"/>
+            <result property="text" column="optionText"/>
+            <result property="isKey" column="is_key"/>
+        </collection>
+    </resultMap>
+
+    <select id="getQuestionHistory" parameterType="String" resultMap="questionMap">
+        SELECT
+            log.id,
+            log.is_ok,
+            log.option_ids,
+            q.id as questionId,
+            q.text as questionText,
+            q.type_id as typeId,
+            q.parse,
+            o.id as optionId,
+            o.text as optionText,
+            o.is_key
+        FROM
+            bs_customer_question_log log
+            LEFT JOIN bs_question q ON log.question_id = q.id
+            LEFT JOIN bs_option o ON log.question_id = o.question_id
+        WHERE
+            log.code = #{code}
+    </select>
+</mapper>
