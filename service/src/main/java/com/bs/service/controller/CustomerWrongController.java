@@ -11,7 +11,11 @@ import com.bs.service.service.ICustomerWrongService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -88,6 +92,24 @@ public class CustomerWrongController {
         }
         boolean b = wrongService.updateBatchById(list);
         return b ? R.ok() : R.error();
+    }
+
+    @GetMapping("hasDailyWrong/{customerId}/{questionId}")
+    public R hasDailyWrong(@PathVariable Integer customerId, @PathVariable Integer questionId){
+        ZoneId zoneId = ZoneId.systemDefault();
+        LocalDate localDate = LocalDate.now();
+        ZonedDateTime zdt = localDate.atStartOfDay(zoneId);
+        Date date = Date.from(zdt.toInstant());
+        long time = date.getTime()/1000;
+        long tTime = time + 24 * 60 * 60;
+        QueryWrapper<CustomerWrong> wrapper = new QueryWrapper<>();
+        wrapper.eq("customer_id",customerId);
+        wrapper.eq("question_id",questionId);
+        wrapper.eq("is_wrong",true);
+        wrapper.ge("updated_time",time);
+        wrapper.lt("updated_time",tTime);
+        CustomerWrong one = wrongService.getOne(wrapper);
+        return one == null ? R.ok() : R.error();
     }
 }
 

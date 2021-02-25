@@ -3,7 +3,6 @@ package com.bs.service.entity;
 import com.baomidou.mybatisplus.annotation.*;
 
 import java.io.Serializable;
-
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -16,14 +15,14 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author dd_up
- * @since 2021-02-19
+ * @since 2021-02-25
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("bs_point_log")
-@ApiModel(value="BsPointLog对象", description="")
-public class PointLog implements Serializable {
+@TableName("bs_feedback")
+@ApiModel(value="BsFeedback对象", description="")
+public class Feedback implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -32,13 +31,7 @@ public class PointLog implements Serializable {
 
     private Integer customerId;
 
-    private Integer typeId;
-
-    private Integer value;
-
-    private Integer productTypeId;
-
-    private Integer productId;
+    private String telephone;
 
     private String content;
 
@@ -49,5 +42,6 @@ public class PointLog implements Serializable {
     @ApiModelProperty(value = "更新时间")
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private Long updatedTime;
+
 
 }

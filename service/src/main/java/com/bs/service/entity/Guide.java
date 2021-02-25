@@ -16,29 +16,21 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author dd_up
- * @since 2021-02-19
+ * @since 2021-02-23
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("bs_point_log")
-@ApiModel(value="BsPointLog对象", description="")
-public class PointLog implements Serializable {
+@TableName("bs_guide")
+@ApiModel(value="BsGuide对象", description="")
+public class Guide implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
-    private Integer customerId;
-
-    private Integer typeId;
-
-    private Integer value;
-
-    private Integer productTypeId;
-
-    private Integer productId;
+    private String title;
 
     private String content;
 
