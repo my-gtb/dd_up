@@ -5,6 +5,8 @@ import com.bs.service.entity.CustomerSign;
 import com.bs.service.entity.CustomerWrong;
 import com.bs.service.entity.PointLog;
 import com.bs.service.entity.Question;
+import com.bs.service.entity.vo.CustomerVo;
+import com.bs.service.entity.vo.PointLogVo;
 import com.bs.service.entity.wx.QuestionHistoryForm;
 import com.bs.service.entity.wx.QuestionHistoryVo;
 import com.bs.service.entity.wx.WxQuestionForm;
@@ -23,6 +25,9 @@ import java.util.Map;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = DdUpApplication.class)
 public class SqlTest {
+
+    @Autowired
+    private ICustomerService customerService;
 
     @Autowired
     private IQuestionService questionService;
@@ -111,5 +116,17 @@ public class SqlTest {
         pointLog.setContent("222222222222222222");
         boolean save = pointLogService.save(pointLog);
         System.out.println(save);
+    }
+
+    @Test
+    public void getCustomerList(){
+        List<CustomerVo> customerList = customerService.getCustomerList(2, 5, null);
+        System.out.println(customerList);
+    }
+
+    @Test
+    public void getPointLogList(){
+        List<PointLogVo> pointLogList = pointLogService.getPointLogList(1, 2, null);
+        System.out.println(pointLogList);
     }
 }

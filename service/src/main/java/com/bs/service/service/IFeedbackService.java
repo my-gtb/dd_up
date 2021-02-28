@@ -2,6 +2,9 @@ package com.bs.service.service;
 
 import com.bs.service.entity.Feedback;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.bs.service.entity.vo.FeedbackVo;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +16,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IFeedbackService extends IService<Feedback> {
 
+    List<FeedbackVo> getFeedbackList(Integer current,Integer limit);
 }

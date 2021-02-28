@@ -2,6 +2,9 @@ package com.bs.service.service;
 
 import com.bs.service.entity.Customer;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.bs.service.entity.vo.CustomerVo;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +16,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface ICustomerService extends IService<Customer> {
 
+    List<CustomerVo> getCustomerList(Integer current,Integer limit,Customer customer);
 }

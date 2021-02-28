@@ -1,5 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.bs.service.mapper.FeedbackMapper">
-
+    <select id="getFeedbackList" resultType="com.bs.service.entity.vo.FeedbackVo">
+        SELECT
+            c.nick_name AS name,
+            f.telephone,
+            f.content,
+            f.created_time
+        FROM
+            bs_feedback f
+            LEFT JOIN bs_customer c ON c.id = f.customer_id
+        ORDER BY
+            f.id DESC
+    </select>
 </mapper>

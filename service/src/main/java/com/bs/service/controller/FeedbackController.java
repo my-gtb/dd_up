@@ -3,13 +3,13 @@ package com.bs.service.controller;
 
 import com.bs.common.utils.R;
 import com.bs.service.entity.Feedback;
+import com.bs.service.entity.PointType;
+import com.bs.service.entity.vo.FeedbackVo;
 import com.bs.service.service.IFeedbackService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
-import org.springframework.web.bind.annotation.RestController;
+import java.util.List;
 
 /**
  * <p>
@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/service/feedback")
+@CrossOrigin
 public class FeedbackController {
 
     @Autowired
@@ -30,6 +31,14 @@ public class FeedbackController {
     public R addFeedback(@RequestBody Feedback feedback){
         boolean save = feedbackService.save(feedback);
         return save ? R.ok() : R.error();
+    }
+
+    @PostMapping("getFeedbackList/{current}/{limit}")
+    public R getFeedbackList(@PathVariable Integer current, @PathVariable Integer limit){
+        List<FeedbackVo> list = feedbackService.getFeedbackList(current,limit);
+        int total = list.size();
+
+        return R.ok().data("list",list).data("total",total);
     }
 
 }

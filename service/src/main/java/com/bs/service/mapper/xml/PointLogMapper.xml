@@ -2,4 +2,39 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.bs.service.mapper.PointLogMapper">
 
+    <select id="getPointLogList" parameterType="com.bs.service.entity.vo.PointLogQueryVo" resultType="com.bs.service.entity.vo.PointLogVo">
+        SELECT
+            c.nick_name as customerName,
+            pt.NAME as typeName,
+            pl.VALUE as pointValue,
+            pl.content as intro,
+            pl.created_time as createdTime
+        FROM
+            bs_customer c
+            LEFT JOIN bs_point_log pl ON pl.customer_id = c.id
+            LEFT JOIN bs_point_type pt ON pt.id = pl.type_id
+        WHERE
+            1=1
+            <if test="queryVo.name != null and queryVo.name != ''">
+                and c.nick_name like concat('%',#{queryVo.name},'%')
+            </if >
+            <if test="queryVo.typeId != null">
+                and pl.type_id = #{queryVo.typeId}
+            </if >
+    </select>
+
+    <select id="getPointLogs" parameterType="Integer" resultType="com.bs.service.entity.vo.PointLogVo">
+        SELECT
+            c.nick_name as customerName,
+            pt.NAME as typeName,
+            pl.VALUE as pointValue,
+            pl.content as intro,
+            pl.created_time as createdTime
+        FROM
+            bs_customer c
+            LEFT JOIN bs_point_log pl ON pl.customer_id = c.id
+            LEFT JOIN bs_point_type pt ON pt.id = pl.type_id
+        WHERE
+            c.id = #{customerId}
+    </select>
 </mapper>

@@ -3,10 +3,8 @@ package com.bs.service.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.bs.common.utils.R;
-import com.bs.service.entity.CustomerSign;
-import com.bs.service.entity.Option;
-import com.bs.service.entity.PointLog;
-import com.bs.service.entity.Question;
+import com.bs.service.entity.*;
+import com.bs.service.entity.vo.CustomerVo;
 import com.bs.service.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -28,6 +26,9 @@ import java.util.Map;
 public class CustomerController {
 
     @Autowired
+    private ICustomerService customerService;
+
+    @Autowired
     private ICustomerSignService signService;
 
     @Autowired
@@ -39,6 +40,26 @@ public class CustomerController {
     @Autowired
     private IPointLogService pointLogService;
 
+    @PostMapping("getCustomerList/{current}/{limit}")
+    public R getCustomerList(@PathVariable Integer current,
+                             @PathVariable Integer limit,
+                             @RequestBody Customer customer){
+        System.out.println(customer);
+        List<CustomerVo> list = customerService.getCustomerList(current,limit,customer);
+        int total = list.size();
+
+        return R.ok().data("list",list).data("total",total);
+    }
+
+    @GetMapping("getCustomers")
+    public R getCustomers(){
+        QueryWrapper<Customer> wrapper = new QueryWrapper<>();
+        wrapper.select("id","nick_name");
+        List<Customer> list = customerService.list(wrapper);
+        return R.ok().data("customers",list);
+    }
+
+    //***************************API***************************
     /**
      * 查询所有
      *
