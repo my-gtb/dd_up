@@ -89,7 +89,6 @@ public class PointLogController {
                              @PathVariable Integer customerId){
         List<PointLogVo> list = pointLogService.getPointLogs(current,limit,customerId);
         int total = list.size();
-
         QueryWrapper<PointAccount> wrapper = new QueryWrapper<>();
         wrapper.eq("customer_id",customerId);
         PointAccount one = pointAccountService.getOne(wrapper);
