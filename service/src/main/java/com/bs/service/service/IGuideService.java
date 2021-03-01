@@ -1,7 +1,10 @@
 package com.bs.service.service;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.bs.service.entity.Guide;
 import com.baomidou.mybatisplus.extension.service.IService;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +16,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IGuideService extends IService<Guide> {
 
+    List<Guide> getGuides(Page<Guide> pageParam, Guide guideQuery);
 }

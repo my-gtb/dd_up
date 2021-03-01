@@ -49,7 +49,7 @@ public class PointLogController {
                              @PathVariable Integer limit,
                              @RequestBody PointLogQueryVo queryVo){
         List<PointLogVo> list = pointLogService.getPointLogList(current,limit,queryVo);
-        int total = list.size();
+        int total = pointLogService.count(null);
         List<PointType> types = pointTypeService.list(null);
 
         return R.ok().data("list",list).data("total",total).data("types",types);

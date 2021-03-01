@@ -21,6 +21,8 @@
             <if test="queryVo.typeId != null">
                 and pl.type_id = #{queryVo.typeId}
             </if >
+        ORDER BY
+            pl.id desc
     </select>
 
     <select id="getPointLogs" parameterType="Integer" resultType="com.bs.service.entity.vo.PointLogVo">
