@@ -1,17 +1,17 @@
 package com.bs.service.service.impl;
 
+import com.alibaba.excel.EasyExcel;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.bs.common.utils.DateUtil;
-import com.bs.service.entity.CustomerWrong;
-import com.bs.service.entity.Option;
-import com.bs.service.entity.Question;
-import com.bs.service.entity.QuestionType;
+import com.bs.service.entity.*;
 import com.bs.service.entity.vo.QuestionChildren;
 import com.bs.service.entity.vo.QuestionForm;
 import com.bs.service.entity.vo.QuestionQuery;
 import com.bs.service.entity.wx.WxOptionForm;
 import com.bs.service.entity.wx.WxQuestionForm;
+import com.bs.service.excel.QuestionExcelListener;
+import com.bs.service.excel.QuestionFormExcel;
 import com.bs.service.mapper.QuestionMapper;
 import com.bs.service.service.IOptionService;
 import com.bs.service.service.IQuestionService;
@@ -20,7 +20,9 @@ import com.bs.service.service.IQuestionTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -292,6 +294,18 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
         questionForm.setKeyIds(keyList);
 
         return questionForm;
+    }
+
+    @Override
+    public void batchSaveQuestion(MultipartFile file, Integer groupId) {
+        try{
+            //文件输入流
+            InputStream inputStream = file.getInputStream();
+            EasyExcel.read(inputStream, QuestionFormExcel.class,new QuestionExcelListener(this,optionService,groupId)).sheet().doRead();
+
+        }catch (Exception e){
+
+        }
     }
 
     public Map<String,Object> getOptionByQuestionId(Integer questionId){

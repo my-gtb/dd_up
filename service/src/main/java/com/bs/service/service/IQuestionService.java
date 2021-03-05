@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.bs.service.entity.vo.QuestionForm;
 import com.bs.service.entity.vo.QuestionQuery;
 import com.bs.service.entity.wx.WxQuestionForm;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
@@ -43,4 +44,6 @@ public interface IQuestionService extends IService<Question> {
     Question getRandomQuestion(Integer groupTypeId);
 
     WxQuestionForm getQuestionFormById(Integer questionId);
+
+    void batchSaveQuestion(MultipartFile file, Integer groupId);
 }

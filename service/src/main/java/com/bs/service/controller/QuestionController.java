@@ -19,6 +19,7 @@ import com.bs.service.service.IQuestionTypeService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
@@ -124,6 +125,14 @@ public class QuestionController {
         List<QuestionType> typeList = questionTypeService.list(null);
         return R.ok().data("typeList", typeList);
     }
+
+    @PostMapping("batchAddQuestion/{groupId}")
+    public R batchAddQuestion(@PathVariable Integer groupId, MultipartFile file) {
+        questionService.batchSaveQuestion(file,groupId);
+        return R.ok();
+    }
+
+
 
 
 
