@@ -7,4 +7,5 @@ public class WxOptionForm {
     private Integer id;
     private String text;
     private Boolean isKey;
+    private String customData;
 }

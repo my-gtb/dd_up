@@ -41,6 +41,9 @@ public class Option implements Serializable {
     @ApiModelProperty(value = "排序")
     private Integer top;
 
+    @ApiModelProperty(value = "主观题答案")
+    private String customData;
+
     @ApiModelProperty(value = "创建时间")
     @TableField(fill = FieldFill.INSERT)
     private Long createdTime;

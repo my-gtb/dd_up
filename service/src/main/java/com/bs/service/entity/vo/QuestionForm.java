@@ -13,5 +13,6 @@ public class QuestionForm {
     private String text;
     public List<String> answer;
     private String parse;
+    private String customData;
     public List<QuestionChildren> children = new ArrayList<>();
 }

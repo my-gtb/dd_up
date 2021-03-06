@@ -82,15 +82,15 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
 
         for (Question question : records) {
             Map<String, Object> map = new HashMap<>();
-            //TODO 优化foreach数据库查询
             map.put("id",question.getId());
             map.put("text",question.getText());
+            map.put("typeId",question.getTypeId());
             map.put("typeName",typeMap.get(question.getTypeId()));
             map.put("parse",question.getParse());
             map.put("top",question.getTop());
             map.put("createdTime", DateUtil.timeStamp2Date(question.getCreatedTime()));
             map.put("updatedTime",DateUtil.timeStamp2Date(question.getUpdatedTime()));
-            Map<String,Object> optionMap = getOptionByQuestionId(question.getId());
+            Map<String,Object> optionMap = getOptionByQuestionId(question.getId(),question.getTypeId());
             map.put("answer",optionMap.get("key"));
             map.put("options",optionMap.get("options"));
             list.add(map);
@@ -141,6 +141,12 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
                 }
                 options.add(option);
             }
+        }else if (questionForm.getTypeId() == 3){
+            Option option = new Option();
+            option.setQuestionId(question.getId());
+            option.setCustomData(questionForm.getCustomData());
+            option.setIsKey(true);
+            return optionService.save(option);
         }
 
         return optionService.saveBatch(options);
@@ -194,6 +200,16 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
                 }
                 options.add(option);
             }
+        }else if (questionForm.getTypeId() == 3){
+            QueryWrapper<Option> wrapper = new QueryWrapper<>();
+            wrapper.eq("question_id",questionForm.getId());
+            wrapper.isNull("text");
+            Option option = optionService.getOne(wrapper);
+            if (option == null){
+                return false;
+            }
+            option.setCustomData(questionForm.getCustomData());
+            return optionService.updateById(option);
         }
         return optionService.updateBatchById(options);
     }
@@ -223,6 +239,7 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
             optionList.add(children);
         }
         form.setAnswer(answers);
+        form.setCustomData(list.get(0).getCustomData());
         form.setChildren(optionList);
         return form;
     }
@@ -308,12 +325,12 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
         }
     }
 
-    public Map<String,Object> getOptionByQuestionId(Integer questionId){
+    public Map<String,Object> getOptionByQuestionId(Integer questionId,Integer typeId){
         Map<String,Object> map = new HashMap<>();
         QueryWrapper<Option> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("question_id",questionId);
         List<Option> options = optionService.list(queryWrapper);
-        if (options.size() > 0){
+        if (typeId != 3 && options.size() > 0){
             List<String> optionNameList = new ArrayList<>();
             List<String> keys = new ArrayList<>();
             String[] s =  {"A. ", "B. ", "C. ", "D. ", "E. ", "F. ", "G. ", "H. ","I. "};
@@ -325,6 +342,11 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
             }
             map.put("key",String.join("，",keys));
             map.put("options",optionNameList);
+        }
+        if (typeId == 3){
+            Option option = options.get(0);
+            map.put("key",option.getCustomData());
+            map.put("options",null);
         }
         return map;
     }
