@@ -67,7 +67,6 @@ public class WeiXinController {
         try {
             String result = AesUtil.decrypt(encryptedData, session_key, iv, "UTF-8");
             if (null != result && result.length() > 0) {
-
                 JSONObject userInfoJSON = JSONObject.parseObject(result);
                 String openId = (String) userInfoJSON.get("openId");
                 QueryWrapper<Customer> wrapper = new QueryWrapper<>();
@@ -75,21 +74,21 @@ public class WeiXinController {
                 Customer customer = customerService.getOne(wrapper);
                 if (customer == null){
                     customer = new Customer();
+                    customer.setOpenId((String) userInfoJSON.get("openId"));
+                    customer.setNickName((String) userInfoJSON.get("nickName"));
+                    customer.setGender((Integer) userInfoJSON.get("gender"));
+                    customer.setCity((String) userInfoJSON.get("city"));
+                    customer.setProvince((String) userInfoJSON.get("province"));
+                    customer.setCountry((String) userInfoJSON.get("country"));
+                    customer.setAvatarUrl((String) userInfoJSON.get("avatarUrl"));
+                    boolean save = customerService.saveOrUpdate(customer);
+                    return save ? R.ok().data("customerId",customer.getId()) : R.error();
                 }
-                customer.setOpenId((String) userInfoJSON.get("openId"));
-                customer.setNickName((String) userInfoJSON.get("nickName"));
-                customer.setGender((Integer) userInfoJSON.get("gender"));
-                customer.setCity((String) userInfoJSON.get("city"));
-                customer.setProvince((String) userInfoJSON.get("province"));
-                customer.setCountry((String) userInfoJSON.get("country"));
-                customer.setAvatarUrl((String) userInfoJSON.get("avatarUrl"));
-                boolean save = customerService.saveOrUpdate(customer);
-                return save ? R.ok().data("customerId",customer.getId()) : R.error();
+                return R.ok().data("customerId",customer.getId());
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         return R.error().message("解密失败");
     }
 }

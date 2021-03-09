@@ -38,5 +38,7 @@
             LEFT JOIN bs_point_type pt ON pt.id = pl.type_id
         WHERE
             c.id = #{customerId}
+        ORDER BY
+            pl.id desc
     </select>
 </mapper>
